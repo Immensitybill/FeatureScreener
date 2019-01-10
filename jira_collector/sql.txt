@@ -1,0 +1,16 @@
+5G:
+
+SELECT a.* ,b.* from mees a , system_items b where b.item_id LIKE CONCAT(a.`sub-feature`,'%') AND a.`sub-feature` <> '' AND a.feature LIKE '5G%' 
+
+OTHERS:
+SELECT a.* ,b.* from mees a , system_items b where b.item_id LIKE CONCAT(a.`feature`,'%') AND a.`sub-feature` NOT
+LIKE "5G%" AND b.function_description IS NOT NULL AND a.`status`='Done'
+
+O&M UI:
+select c.*, z.* from (5G/OTHERS) c,(SELECT d.* from domain d WHERE d.Tribe = 'O&M UI' ) z WHERE c.component like CONCAT('%',z.domain,'%') GROUP BY c.mee_keys
+
+
+
+Features in other tribe
+
+select s.* from (SELECT a.* ,b.* from mees a , system_items b where b.item_id LIKE CONCAT(a.`sub-feature`,'%') AND a.`sub-feature` <> '' AND a.feature LIKE '5G%' ) s where s.`sub-feature` not in (select c.`sub-feature` from (SELECT a.* ,b.* from mees a , system_items b where b.item_id LIKE CONCAT(a.`sub-feature`,'%') AND a.`sub-feature` <> '' AND a.feature LIKE '5G%' ) c,(SELECT d.* from domain d WHERE d.Tribe = 'O&M UI' ) z WHERE c.component like CONCAT('%',z.domain,'%') GROUP BY c.mee_keys)

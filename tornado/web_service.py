@@ -40,12 +40,12 @@ class IndexHandler(tornado.web.RequestHandler):
             dig = p * 100
             if p[0][0] >0.5:
                 prob = "%.2f%%" %(dig)
-                result = "Creened feature is within MANO's scope, the possibility is around "+ prob
+                result = "Screened feature is within MANO scope, chance is around "+ prob
             else:
-                result = "Creened feature may NOT be in MANO's scope"
+                result = "Screened feature may NOT be in MANO's scope"
         else:
             result = "Please insert a feature name"
-        self.render('index1.html',text=text,result='{0}'.format(result))
+        self.render('index.html',text=text,result='{0}'.format(result))
 
 
 

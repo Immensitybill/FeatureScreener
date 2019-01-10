@@ -1,19 +1,23 @@
 from tensorflow import keras
-import pandas as pd
 import numpy as np
 import tensorflow as tf
-import dictionary_creater as dc
 import pickle as pk
+import os
+
+from data_process.cleaner_assemblers import CleanerAssembler
+from data_process.text_cleaners import StopwordsRemover, LowercaseTransformer
+
 
 def load_dict():
-    with open("F:\\PyWorkSpace\\FeatureScreener\\tensorflow\\dict.file", "rb") as f:
+    with open(os.path.join(os.path.dirname(__file__), "dict.file"), "rb") as f:
         d = pk.load(f)
         return d
 
 def convertText2Index(text, dict):
-    data = tf.compat.as_str(text)
-    data = data.replace('-', ' ')
-    data = data.split()
+    ca = CleanerAssembler()
+    ca.add(StopwordsRemover())
+    ca.add(LowercaseTransformer())
+    data = ca.do_cleaning(text)
     result = np.array([])
     for word in data:
         if (word in dict.keys()):
@@ -25,7 +29,7 @@ def convertText2Index(text, dict):
 
 
 def predict(text):
-    model = keras.models.load_model(filepath="F:\\PyWorkSpace\\FeatureScreener\\tensorflow\\model\\my_model1.h5")
+    model = keras.models.load_model(filepath=os.path.join(os.path.dirname(__file__), "./model/my_model1.h5"))
     dict1 = load_dict()
 
     convertd = convertText2Index(text, dict1)
@@ -42,6 +46,6 @@ def predict(text):
     return result
 
 
-# text1 = "5GC000585-CFAM-CP2 - AEUB Nokia AirScale AAS 28 GHz"
-# result = predict(text1)
-# print(result)
+text1 = "5GC000585-CFAM-CP2 - AEUB Nokia AirScale AAS 28 GHz"
+result = predict(text1)
+print(result)

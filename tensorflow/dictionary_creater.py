@@ -5,6 +5,9 @@ import pandas as pd
 import numpy as np
 import pickle as pk
 
+from data_process.cleaner_assemblers import CleanerAssembler
+from data_process.text_cleaners import StopwordsRemover, LowercaseTransformer
+
 
 def read_data(filename):
     """Extract the first file enclosed in a zip file as a list of words."""
@@ -15,20 +18,30 @@ def read_data(filename):
 def read_csv(filename):
     df = pd.read_csv(filename,index_col=False,header=None)
     df.rename(columns={0:'feature_name',1:'works',2:'flag'},inplace=True)
+    ca = CleanerAssembler()
+    ca.add(StopwordsRemover())
+    ca.add(LowercaseTransformer())
+
     str = ""
     for i in range(0, len(df)):
         str = str +" "+ df.iloc[i][0]
-    data = tf.compat.as_str(str).split()
+    data = ca.do_cleaning(str)
     return data, df
 
 def convertData2Index(data, dictionary):
     result = []
+    ca = CleanerAssembler()
+    ca.add(StopwordsRemover())
+    ca.add(LowercaseTransformer())
     for i in range(0, len(data)):
         str = data.iloc[i][0]
-        words = tf.compat.as_str(str).split()
+        words = ca.do_cleaning(str)
         indexs = np.array([])
         for word in words:
-           indexs =  np.append(indexs,dictionary[word])
+            if not word in dictionary.keys():
+                indexs = np.append(indexs,0)
+            else:
+                indexs =  np.append(indexs,dictionary[word])
         wordList = list(indexs)
         result.append(wordList)
     return np.array(result)
