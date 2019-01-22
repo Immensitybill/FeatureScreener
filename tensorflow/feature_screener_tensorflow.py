@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def main():
     str, df =dc.read_csv("fun_desc.csv")
-    data, count, dictionary, reversed_dictionary = dc.build_dataset(str,1000)
+    data, count, dictionary, reversed_dictionary = dc.build_dataset(str,10000)
 
     convertedData_full = dc.convertData2Index(df,dictionary)
 
@@ -27,12 +27,12 @@ def main():
     testLabel = label_full[88:]
 
 
-    vocab_size = 2000
+    vocab_size = 10000
 
     model = keras.Sequential()
     model.add(keras.layers.Embedding(vocab_size, 16))
     model.add(keras.layers.GlobalAveragePooling1D())
-    model.add(keras.layers.Dense(16,kernel_regularizer=keras.regularizers.l2(0.01), activation=tf.nn.relu))
+    model.add(keras.layers.Dense(26,kernel_regularizer=keras.regularizers.l2(0.01), activation=tf.nn.relu))
     # model.add(keras.layers.Dropout(0.3))
     model.add(keras.layers.Dense(1, activation=tf.nn.sigmoid))
     model.compile(optimizer=tf.train.AdamOptimizer(),
@@ -42,8 +42,8 @@ def main():
 
     history = model.fit(trainingData,
                         trainingLabel,
-                        epochs=500,
-                        batch_size=5,
+                        epochs=80,
+                        batch_size=16,
                         validation_data=(validatData, validatLabel),
                         verbose=1)
 

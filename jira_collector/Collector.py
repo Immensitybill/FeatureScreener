@@ -3,7 +3,7 @@ import re
 import jira
 import openpyxl
 
-jiraDC = JIRA("https://jiradc.int.net.nokia.com", basic_auth=("bichen  ", "cbCB3921106"))
+jiraDC = JIRA("https://jiradc.int.net.nokia.com", basic_auth=("bichen  ", "cbCB3921107"))
 
 def get_all_records(JQL,fields,maxResults=5000):
     startAt = 0
@@ -38,7 +38,7 @@ def get_MEE_records(maxresults):
     parent = "parent,"
     status = "status"
     fields = timeestimate + component + summary + parent + status
-    mee_items = get_all_records(JQL1, fields, maxResults=maxresults)
+    mee_items = get_all_records(JQL, fields, maxResults=maxresults)
     return mee_items
 
 

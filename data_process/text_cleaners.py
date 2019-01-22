@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
 
 
 class TextCleaner(metaclass=ABCMeta):
@@ -29,3 +30,25 @@ class LowercaseTransformer(TextCleaner):
         for token in tokens:
             clean_tokens.append(token.lower())
         return clean_tokens
+
+class Stemmer(TextCleaner):
+    def clean(self,tokens):
+        porter = PorterStemmer()
+        return [porter.stem(word) for word in tokens]
+
+class PunctuationRemover(TextCleaner):
+    def clean(self,tokens):
+        clean_tokens = []
+        for token in tokens:
+            if token == '-':
+                continue
+            elif token.isalpha():
+                clean_tokens.append(token)
+        return clean_tokens
+
+# def test():
+#     str = ['aa-bb','-']
+#     c = PunctuationRemover()
+#     print(c.clean(str))
+#
+# test()

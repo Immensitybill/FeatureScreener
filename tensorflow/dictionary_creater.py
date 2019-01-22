@@ -6,7 +6,7 @@ import numpy as np
 import pickle as pk
 
 from data_process.cleaner_assemblers import CleanerAssembler
-from data_process.text_cleaners import StopwordsRemover, LowercaseTransformer
+from data_process.text_cleaners import StopwordsRemover, LowercaseTransformer, Stemmer, PunctuationRemover
 
 
 def read_data(filename):
@@ -19,8 +19,10 @@ def read_csv(filename):
     df = pd.read_csv(filename,index_col=False,header=None)
     df.rename(columns={0:'feature_name',1:'works',2:'flag'},inplace=True)
     ca = CleanerAssembler()
+    ca.add(PunctuationRemover())
     ca.add(StopwordsRemover())
     ca.add(LowercaseTransformer())
+    # ca.add(Stemmer())
 
     str = ""
     for i in range(0, len(df)):
@@ -31,8 +33,10 @@ def read_csv(filename):
 def convertData2Index(data, dictionary):
     result = []
     ca = CleanerAssembler()
+    ca.add(PunctuationRemover())
     ca.add(StopwordsRemover())
     ca.add(LowercaseTransformer())
+    # ca.add(Stemmer())
     for i in range(0, len(data)):
         str = data.iloc[i][0]
         words = ca.do_cleaning(str)
@@ -84,7 +88,7 @@ def build_dataset(words, n_words):
 
 
 
-# str, df =read_csv("Feature_names.csv")
+# str, df =read_csv("fun_desc.csv")
 # data, count, dictionary, reversed_dictionary = build_dataset(str,10000)
 # re = convertData2Index(df,dictionary)
 # aa = [len(e) for e in re]

@@ -5,7 +5,7 @@ import pickle as pk
 import os
 
 from data_process.cleaner_assemblers import CleanerAssembler
-from data_process.text_cleaners import StopwordsRemover, LowercaseTransformer
+from data_process.text_cleaners import StopwordsRemover, LowercaseTransformer, PunctuationRemover
 
 
 def load_dict():
@@ -15,6 +15,7 @@ def load_dict():
 
 def convertText2Index(text, dict):
     ca = CleanerAssembler()
+    ca.add(PunctuationRemover())
     ca.add(StopwordsRemover())
     ca.add(LowercaseTransformer())
     data = ca.do_cleaning(text)
@@ -40,12 +41,12 @@ def predict(text):
     sequence = keras.preprocessing.sequence.pad_sequences(seque,
                                                             value=dict1["<PAD>"],
                                                             padding='post',
-                                                            maxlen=60)
+                                                            maxlen=1050)
     print(sequence)
     result = model.predict(sequence)
     return result
 
 
-text1 = "5GC000585-CFAM-CP2 - AEUB Nokia AirScale AAS 28 GHz"
-result = predict(text1)
-print(result)
+# text1 = "ddd"
+# result = predict(text1)
+# print(result)
