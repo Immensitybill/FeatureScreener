@@ -32,7 +32,7 @@ def main():
     model = keras.Sequential()
     model.add(keras.layers.Embedding(vocab_size, 16))
     model.add(keras.layers.GlobalAveragePooling1D())
-    model.add(keras.layers.Dense(26,kernel_regularizer=keras.regularizers.l2(0.01), activation=tf.nn.relu))
+    # model.add(keras.layers.Dense(26,kernel_regularizer=keras.regularizers.l2(0.01), activation=tf.nn.relu))
     # model.add(keras.layers.Dropout(0.3))
     model.add(keras.layers.Dense(1, activation=tf.nn.sigmoid))
     model.compile(optimizer=tf.train.AdamOptimizer(),
@@ -42,7 +42,7 @@ def main():
 
     history = model.fit(trainingData,
                         trainingLabel,
-                        epochs=80,
+                        epochs=600,
                         batch_size=16,
                         validation_data=(validatData, validatLabel),
                         verbose=1)
